@@ -18,12 +18,16 @@ Objective:  determine the system's upper bounds and the proportion of kong's out
 - discrepency between assumptions and experiment results   
 
 ### Under such conditions, Possible Ways to Handle Increased Traffic:   
-#### Two VIPs (Virtual IPs):   
-   
-#### Separate Network Interfaces for Minio and Kong:     
+#### DNS round-robin, Gateway dual VIP:    
+#### Network card upgrade, 10G -> 25G：      
+#### Split internal and external traffic to different network cards：     
 
-#### Load Balancing on Different Layers:   
-[ref](https://www.kawabangga.com/posts/5301)
+#### Layer 4 load balancing  
+[ref](https://www.kawabangga.com/posts/5301)   
+#### Service optimization, optimize existing network requests.   
+
+
+
 ## Ways to Experiment: Using Stress-Testing Tools   
 Comparison of Using Different Stress-Testing Tools:   
 
