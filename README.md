@@ -44,8 +44,18 @@ __Experiment Configuration__:
    - Use Stress-Testing Tools to send 900 requests all at once
     
 __Observations and Discrepancies__:  
-- Outbound traffic of MinIO blocks does not distribute evenly.     
-      ![ossdiff](images/oss_out_dif.png)  
+- The ratio of outbound traffic of MinIO blocks differ everytime.     
+  ![ossdiff](images/oss_out_dif1.png)   
+  ![ossdiff](images/oss_out_dif2.png)  
+  ![ossdiff](images/oss_out_dif3.png)  
+
+  OSS0 and OSS3 outflow more because they store the actual data blocks.   
+  OSS1 and OSS2 outflow less because they only store parity blocks.   
+  The theoretical ratio is 5:2:2:5 because      
+  - OSS0 and OSS3 each handle 3 outgoing requests from other OSS nodes (each node requests half of the data file) and 1 internal request (full 
+    data file).    
+  - OSS1 and OSS2 each handle 1 internal request (full data file).
+  However, the actual traffic distribution is not always 5:2:2:5. This variability might be due to uneven load balancing by Kong   
 
 - In some cases, the output and input flow of Kong-MinIO is not the same.      
       ![inoutnotsame1](images/konginoutdif.png)   
