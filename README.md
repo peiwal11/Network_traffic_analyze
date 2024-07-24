@@ -3,7 +3,10 @@
 
 ## Current Network Configuration:  
 __Diagram__:
-![network](images/network.png)
+
+
+![network](images/network.png)   
+   
 
 __Monitor Notes__:
 - Kong and OSS (MinIO) instances are all in their own Docker containers.
@@ -18,7 +21,8 @@ __Monitor Notes__:
 
 There are four Kong instances, each attached to a MinIO instance. These MinIO instances can either be a data block or a parity block. In total, there are 2 data blocks and 2 parity blocks. Since a MinIO block only contains half of the data (due to EC:2), when a client request comes in, MinIOA needs to retrieve data from at least one other MinIO block. Therefore, the bandwidth of such Kong instances is not only used for responding to client requests but also for sending data from one MinIO block to another. We are curious about the proportion of the total output of a Kong instance that is used for communication between MinIO blocks. To answer this question, we set up an experiment and made calculations based on certain assumptions.  
 
-__Objective__:  Determine the system's upper bounds and the proportion of Kong's outbound traffic that is dedicated to client responses.       
+__Objective__:    
+   Determine the system's upper bounds and the proportion of Kong's outbound traffic that is dedicated to client responses.         
  
 ## Calculations:  
 __Assumptions__:  
@@ -40,16 +44,19 @@ __Experiment Configuration__:
    - Use Stress-Testing Tools to send 900 requests all at once
     
 __Observations and Discrepancies__:  
-    - Outbound traffic of MinIO blocks does not distribute evenly.   
-      ![ossdiff](images/oss_out_dif.png)
-    - In some cases, the output and input flow of Kong-MinIO is not the same.   
-      ![inoutnotsame1](images/konginoutdif.png)
-      ![inoutnotsame2](images/konginoutdif2.png)
+- Outbound traffic of MinIO blocks does not distribute evenly.     
+      ![ossdiff](images/oss_out_dif.png)  
+
+- In some cases, the output and input flow of Kong-MinIO is not the same.      
+      ![inoutnotsame1](images/konginoutdif.png)   
+      ![inoutnotsame2](images/konginoutdif2.png)    
+         
 
 __Cause of such discrepency__:    
 Kong-MinIO output and input discrepancies are due to failed requests from the go-stress-testing tool. Using another stress-testing tool could resolve this problem.   
-![inoutsame](images/konginoutsame.png)
-__Result__: 
+![inoutsame](images/konginoutsame.png)  
+    
+__Results__: 
 ![totalresult1](images/total_dif.png)
 ![totalresult1](images/total_dif2.png)
 ![totalresult1](images/total_same.png)
@@ -57,19 +64,19 @@ __Result__:
 Based on the monitor screenshot, as `kubernetes-6 in` represents the download file (response to the client) and `kubernetes-7 out` represents the total output of the node, with the upper device limit being 123MB, which is close to the 128MB theoretical maximum, we conclude that the results align with our calculations. The proportion of Kong's outbound traffic dedicated to client responses is approximately 85MB out of 123MB, which is close to 3/4 and slightly lower than the theoretical upper bound.   
      
 
-### Handling Increased Traffic:   
-#### DNS round-robin, Gateway dual VIP:    
-__Possible limitations__: 
+## Handling Increased Traffic:   
+### DNS round-robin, Gateway dual VIP:    
+_Possible limitations_: 
 - DNS round-robin may not distribute traffic evenly
 - not possible to assign weighst to DNS entries
 
-#### Network card upgrade, 10G -> 25G：    
+### Network card upgrade, 10G -> 25G：    
 
-#### Split internal and external traffic to different network cards：     
+### Split internal and external traffic to different network cards：     
 
-#### Layer 4 load balancing  
-[ref](https://www.kawabangga.com/posts/5301)   
-#### Service optimization, optimize existing network requests.   
+### Layer 4 load balancing : [ref](https://www.kawabangga.com/posts/5301)   
+
+### Service optimization, optimize existing network requests.   
 
 
 
