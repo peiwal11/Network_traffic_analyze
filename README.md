@@ -55,7 +55,8 @@ __Observations and Discrepancies__:
   - OSS0 and OSS3 each handle 3 outgoing requests from other OSS nodes (each node requests half of the data file) and 1 internal request (full 
     data file).    
   - OSS1 and OSS2 each handle 1 internal request (full data file).
-  However, the actual traffic distribution is not always 5:2:2:5. This variability might be due to uneven load balancing by Kong   
+      
+  This explains the effective service bandwidth ratio of 8/11, where 1Gbps (123MB/s) translates to an actual throughput of 89MB/s. However, the actual traffic distribution is not always 5:2:2:5. This variability might be due to uneven load balancing by Kong.        
 
 - In some cases, the output and input flow of Kong-MinIO is not the same.      
       ![inoutnotsame1](images/konginoutdif.png)   
