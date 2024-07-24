@@ -31,7 +31,7 @@ __Assumptions__:
 - There are three Kong instances, each attached to a MinIO instance.  In total, there are 2 data blocks and 1 parity block. Since a MinIO block only contains half of the data (due to EC:1), when a client request comes in, MinIOA needs to retrieve data from at least one other MinIO block. 
 
   
-As file size, transfer speed, and time cancel out in the equation, these parameters are not critical and can be set randomly as you like. Under these assumptions, we calculate that the proportion of Kong's outbound traffic dedicated to client responses is about 3/4. We set up an experiment to verify our assumptions.       
+As file size, transfer speed, and time cancel out in the equation, these parameters are not critical and can be set randomly as you like. Under these assumptions, we calculate that the proportion of Kong's outbound traffic dedicated to client responses is about 3/4.  This calculation comes from considering each Kong instance's output (1 + 1 + 1) and MinIO communication (1/2 * 2).  We set up an experiment to verify our assumptions.       
 
 
 
