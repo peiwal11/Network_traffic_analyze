@@ -3,6 +3,7 @@
 
 ## Current Network Configuration:  
 __Diagram__:
+![network](images/network.png)
 
 __Monitor Notes__:
 - Kong and OSS (MinIO) instances are all in their own Docker containers.
@@ -21,12 +22,12 @@ __Objective__:  Determine the system's upper bounds and the proportion of Kong's
  
 ## Calculations:  
 __Assumptions__:  
-    - Data blocks and parity blocks are evenly distributed (the statistics of each MinIO container's output are nearly the same).   
-    - Assume the Kong instance we pick always has half the data and only needs to take half of the data from another MinIO block.   
-    - There are three Kong instances, each attached to a MinIO instance.  In total, there are 2 data blocks and 1 parity block. Since a MinIO block only contains half of the data (due to EC:1), when a client request comes in, MinIOA needs to retrieve data from at least one other MinIO block. 
+- Data blocks and parity blocks are evenly distributed (the statistics of each MinIO container's output are nearly the same).   
+- Assume the Kong instance we pick always has half the data and only needs to take half of the data from another MinIO block.   
+- There are three Kong instances, each attached to a MinIO instance.  In total, there are 2 data blocks and 1 parity block. Since a MinIO block only contains half of the data (due to EC:1), when a client request comes in, MinIOA needs to retrieve data from at least one other MinIO block. 
 
   
-As file size, transfer speed, and time cancel out in the equation, these parameters are not critical and can be set randomly as you like. Under these assumptions, we calculate that the proportion of Kong's outbound traffic dedicated to client responses is about 2/3. We set up an experiment to verify our assumptions.       
+As file size, transfer speed, and time cancel out in the equation, these parameters are not critical and can be set randomly as you like. Under these assumptions, we calculate that the proportion of Kong's outbound traffic dedicated to client responses is about 3/4. We set up an experiment to verify our assumptions.       
 
 
 
@@ -40,12 +41,20 @@ __Experiment Configuration__:
     
 __Observations and Discrepancies__:  
     - Outbound traffic of MinIO blocks does not distribute evenly.   
-      
+      ![ossdiff](images/oss_out_dif.png)
     - In some cases, the output and input flow of Kong-MinIO is not the same.   
-
+      ![inoutnotsame1](images/konginoutdif.png)
+      ![inoutnotsame2](images/konginoutdif2.png)
 
 __Cause of such discrepency__:    
-Kong-MinIO output and input discrepancies are due to failed requests from the go-stress-testing tool. Using another stress-testing tool could resolve this problem.       
+Kong-MinIO output and input discrepancies are due to failed requests from the go-stress-testing tool. Using another stress-testing tool could resolve this problem.   
+![inoutsame](images/konginoutsame.png)
+__Result__: 
+![totalresult1](images/total_dif.png)
+![totalresult1](images/total_dif2.png)
+![totalresult1](images/total_same.png)
+
+Based on the monitor screenshot, as `kubernetes-6 in` represents the download file (response to the client) and `kubernetes-7 out` represents the total output of the node, with the upper device limit being 123MB, which is close to the 128MB theoretical maximum, we conclude that the results align with our calculations. The proportion of Kong's outbound traffic dedicated to client responses is approximately 85MB out of 123MB, which is close to 3/4 and slightly lower than the theoretical upper bound.   
      
 
 ### Handling Increased Traffic:   
@@ -71,5 +80,11 @@ Tools to Consider:
 - python custom script       
 - go-stress-testing    
 - apache bench    
-- jmeter    
+- jmeter
+
+
+
+Simplified comparison version is as below image, detailed version is at comparison_of_ST_tools.md
+
+![comparison](images/compare.png)  
 
