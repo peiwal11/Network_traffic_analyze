@@ -45,9 +45,9 @@ __Experiment Configuration__:
     
 __Observations and Discrepancies__:  
 - The ratio of outbound traffic of MinIO blocks differ everytime.     
-  ![ossdiff](images/oss_out_dif1.png)   
-  ![ossdiff](images/oss_out_dif2.png)  
-  ![ossdiff](images/oss_out_dif3.png)  
+  ![ossdiff](images/ossdiff1.png)   
+  ![ossdiff](images/ossdiff2.png)  
+  ![ossdiff](images/ossdiff3.png)  
 
   OSS0 and OSS3 outflow more because they store the actual data blocks.   
   OSS1 and OSS2 outflow less because they only store parity blocks.   
