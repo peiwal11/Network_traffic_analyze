@@ -55,4 +55,4 @@
 
     
 Conclusion:   
-The go-stress-testing tool may not be suitable for scenarios involving high request rates for large data downloads simultaneously. Additionally, pressing Ctrl-C does not force the requests to stop immediately. Our coworker, Cobolbaby, found that instead of stopping the program immediately, the go-stress-testing logic only processes Ctrl-C once a connection is completed. In our case, Ctrl-C failed to stop the process because our connections lasted very long.
+The go-stress-testing tool may not be suitable for scenarios involving high request rates for large data downloads simultaneously. Additionally, pressing Ctrl-C does not force the requests to stop immediately. Our coworker, [Cobolbaby](https://github.com/cobolbaby), found that instead of stopping the program immediately, the go-stress-testing logic only processes Ctrl-C once a connection is completed. In our case, Ctrl-C failed to stop the process because our connections lasted very long.
